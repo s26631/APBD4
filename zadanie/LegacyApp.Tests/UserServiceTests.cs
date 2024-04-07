@@ -1,34 +1,22 @@
-using LegacyApp.Tests;
+using Xunit;
+using LegacyApp;
+using System;
 
-
-namespace LegacyApp.Tests;
-
-public class UserServiceTests
+namespace LegacyApp.Tests
 {
-    [Fact]
-    public void AddUser_ReturnFalseWhenNameIsEmpty()
+    public class UserServiceTests
     {
-        //Arrange
-        var userService = new UserService();
-        
-        //Act
-        var result = userService.AddUser(
-            null, 
-            "Kowalski",
-            "kowalski@gmail.com",
-            DateTime.Parse("2000-01-01"),
-            1);
-        
-        Action action = () => userService.AddUser(null, 
-                "Kowalski",
-                "kowalski@gmail.com",
-                DateTime.Parse("2000-01-01"),
-                1);
+        [Fact]
+        public void AddUser_ReturnFalseWhenNameIsEmpty()
+        {
+            // Używamy prostych implementacji zamiast mocków
+            var fakeClientRepository = new FakeClientRepository();
+            var fakeUserCreditService = new FakeUserCreditService();
+            var userService = new UserService(fakeClientRepository, fakeUserCreditService);
 
+            var result = userService.AddUser("", "Kowalski", "kowalski@gmail.com", new DateTime(2000, 1, 1), 1);
 
-        //Assert
-        Assert.Equal(false, result);
-        Assert.False(result);
-        Assert.Throws<ArgumentException>(action);
+            Assert.False(result);
+        }
     }
 }
